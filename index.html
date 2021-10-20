@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>PayDays Calculator</title>
+</head>
+<body>
+    <script>
+      function PayDays(date,daysLeft){
+        Date.prototype.addDays = function(days){
+          var date = new Date(this.valueOf());
+          date.setDate(date.getDate() + days);
+          return date;  
+        }
+        let paymentDays = 0;
+        let i = 0;
+        let lastDate = '';
+        while(i <= daysLeft){
+          let dateNew = new Date(date);
+          let finalDate = dateNew.addDays(i);
+          if(i == daysLeft){
+            lastDate = finalDate;
+          }
+          let dateTwo = new Date(finalDate);
+          let dayofWeek = dateTwo.getDay();
+          if(dayofWeek !== 6 && dayofWeek !== 0){
+            paymentDays++;
+          }
+          i++;
+        }
+        const element = document.getElementById("displayer");
+        element.innerHTML = `Payment Days left: ${paymentDays} <br>The last day of contract is: ${lastDate}`;
+      }
+      document.addEventListener('click',(e)=>{
+        if(e.target.id === 'btn'){
+          let days = document.getElementById('days').value;
+          PayDays(new Date(),days);
+        }else if(e.target.id === 'reset'){
+          let days = document.getElementById('days');
+          let displayer = document.querySelector('#displayer');
+          days.value = '';
+          displayer.innerHTML = '';
+        }
+      })
+    </script>
+    <section class="container">
+    <h3>Calculator</h3><p>Please insert your contract days left:</p>
+    <input type="number" id="days">
+    <button id="btn">Submit</button>
+    <button id="reset">Reset</button>
+    <h3 id="displayer"></h3>
+  </section>
+</body>
+</html>
